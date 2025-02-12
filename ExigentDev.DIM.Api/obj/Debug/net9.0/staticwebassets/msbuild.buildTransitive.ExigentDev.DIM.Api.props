@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../buildMultiTargeting/ExigentDev.DIM.Api.props" />
+</Project>
