@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "terminate-dotnet-watch",
+      "type": "shell",
+      "command": "kill -2 -- -$(ps -o pid,pgid,command -p $(lsof -ti:7200) | awk '/DIM/ {print $2}')",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "focus": false,
+        "panel": "dedicated",
+        "close": true
+      }
+    }
+  ]
+}

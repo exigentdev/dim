@@ -8,6 +8,7 @@
 /Users/jakehadley/dev/dim/ExigentDev.DIM.Api/bin/Debug/net9.0/ExigentDev.DIM.Api.pdb
 /Users/jakehadley/dev/dim/ExigentDev.DIM.Api/bin/Debug/net9.0/Microsoft.AspNetCore.OpenApi.dll
 /Users/jakehadley/dev/dim/ExigentDev.DIM.Api/bin/Debug/net9.0/Microsoft.OpenApi.dll
+/Users/jakehadley/dev/dim/ExigentDev.DIM.Api/bin/Debug/net9.0/Scalar.AspNetCore.dll
 /Users/jakehadley/dev/dim/ExigentDev.DIM.Api/obj/Debug/net9.0/ExigentDev.DIM.Api.csproj.AssemblyReference.cache
 /Users/jakehadley/dev/dim/ExigentDev.DIM.Api/obj/Debug/net9.0/ExigentDev.DIM.Api.GeneratedMSBuildEditorConfig.editorconfig
 /Users/jakehadley/dev/dim/ExigentDev.DIM.Api/obj/Debug/net9.0/ExigentDev.DIM.Api.AssemblyInfoInputs.cache
