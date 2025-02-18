@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace ExigentDev.DIM.Api.Dtos.Stock
 {
   public class UpdateStockRequestDto
