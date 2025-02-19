@@ -1,5 +1,6 @@
 using ExigentDev.DIM.Api.Data;
 using ExigentDev.DIM.Api.Dtos.Stock;
+using ExigentDev.DIM.Api.Interfaces;
 using ExigentDev.DIM.Api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,14 +9,16 @@ namespace ExigentDev.DIM.Api.Controllers
 {
   [Route("api/stock")]
   [ApiController]
-  public class StockController(ApplicationDBContext context) : ControllerBase
+  public class StockController(ApplicationDBContext context, IStockRepository stockRepo)
+    : ControllerBase
   {
     private readonly ApplicationDBContext _context = context;
+    private readonly IStockRepository _stockRepo = stockRepo;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-      var stocks = await _context.Stocks.ToListAsync();
+      var stocks = await _stockRepo.GetAllAsync();
 
       var stockDto = stocks.Select(s => s.ToStockDto());
 
@@ -25,7 +28,7 @@ namespace ExigentDev.DIM.Api.Controllers
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
-      var stock = await _context.Stocks.FindAsync(id);
+      var stock = await _stockRepo.GetByIdAsync(id);
 
       if (stock == null)
       {
@@ -40,8 +43,7 @@ namespace ExigentDev.DIM.Api.Controllers
     {
       var stockModel = stockDto.ToStockFromCreateDTO();
 
-      await _context.Stocks.AddAsync(stockModel);
-      await _context.SaveChangesAsync();
+      await _stockRepo.CreateAsync(stockModel);
 
       return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
     }
@@ -52,15 +54,12 @@ namespace ExigentDev.DIM.Api.Controllers
       [FromBody] UpdateStockRequestDto updateDto
     )
     {
-      var stockModel = await _context.Stocks.FindAsync(id);
+      var stockModel = await _stockRepo.UpdateAsync(id, updateDto);
 
       if (stockModel == null)
       {
         return NotFound();
       }
-
-      _context.Entry(stockModel).CurrentValues.SetValues(updateDto);
-      await _context.SaveChangesAsync();
 
       return Ok(stockModel.ToStockDto());
     }
@@ -68,15 +67,12 @@ namespace ExigentDev.DIM.Api.Controllers
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-      var stockModel = await _context.Stocks.FindAsync(id);
+      var stockModel = await _stockRepo.DeleteAsync(id);
 
       if (stockModel == null)
       {
         return NotFound();
       }
-
-      _context.Stocks.Remove(stockModel);
-      await _context.SaveChangesAsync();
 
       return NoContent();
     }

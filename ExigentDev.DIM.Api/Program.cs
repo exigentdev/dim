@@ -1,4 +1,6 @@
 using ExigentDev.DIM.Api.Data;
+using ExigentDev.DIM.Api.Interfaces;
+using ExigentDev.DIM.Api.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -11,6 +13,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
   options.UseNpgsql(builder.Configuration["DB:ConnectionString"])
 );
+
+builder.Services.AddScoped<IStockRepository, StockRepository>();
 
 var app = builder.Build();
 
