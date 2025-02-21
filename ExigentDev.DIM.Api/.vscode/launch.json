@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET Core Launch (web)",
+      "name": "Launch w/ prod db",
       "type": "coreclr",
       "request": "launch",
       "postDebugTask": "terminate-dotnet-watch",
@@ -16,7 +16,25 @@
         "uriFormat": "%s/scalar"
       },
       "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "DB_ENV": "prod"
+      }
+    },
+    {
+      "name": "Launch w/ dev db",
+      "type": "coreclr",
+      "request": "launch",
+      "postDebugTask": "terminate-dotnet-watch",
+      "program": "dotnet",
+      "args": ["watch", "run"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+        "uriFormat": "%s/scalar"
+      },
+      "env": {
+        "DB_ENV": "dev"
       }
     }
   ]

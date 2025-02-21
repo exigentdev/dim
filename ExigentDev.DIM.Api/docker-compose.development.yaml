@@ -1,0 +1,18 @@
+services:
+  exigentdevdimapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: exigentdevdimapi-dev
+    container_name: exigentdevdimapi-dev
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - "5190:5190"
+    environment:
+      - DB_CONNECTION_STRING=${DB_CONNECTION_STRING_DEV} # Pass env vars from Coolify
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:5190/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
