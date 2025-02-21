@@ -30,8 +30,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ExigentDev.Dim.Api/
-          file: ExigentDev.Dim.Api/Dockerfile
+          context: ExigentDev.DIM.Api/
+          file: ExigentDev.DIM.Api/Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/your-image-name:latest
