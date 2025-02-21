@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug - List files
+        run: ls -R
+        
       - name: Checkout repository
         uses: actions/checkout@v4
 
