@@ -37,9 +37,9 @@ jobs:
           file: ExigentDev.DIM.Api/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/your-image-name:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/your-image-name:${{ env.GIT_SHA }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/your-image-name:${{ env.BRANCH_NAME }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/exigentdevdimapi:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/exigentdevdimapi:${{ env.GIT_SHA }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/exigentdevdimapi:${{ env.BRANCH_NAME }}
           labels: |
             org.opencontainers.image.source=${{ github.repository }}
             org.opencontainers.image.revision=${{ env.GIT_SHA }}
