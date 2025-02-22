@@ -9,10 +9,8 @@ namespace ExigentDev.DIM.Api.Controllers
 {
   [Route("api/stock")]
   [ApiController]
-  public class StockController(ApplicationDBContext context, IStockRepository stockRepo)
-    : ControllerBase
+  public class StockController(IStockRepository stockRepo) : ControllerBase
   {
-    private readonly ApplicationDBContext _context = context;
     private readonly IStockRepository _stockRepo = stockRepo;
 
     [HttpGet]

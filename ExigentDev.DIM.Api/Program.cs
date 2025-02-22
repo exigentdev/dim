@@ -13,7 +13,13 @@ var connectionString = dbEnv == "dev" ? dbDevString : dbProdString;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder
+  .Services.AddControllers()
+  .AddNewtonsoftJson(options =>
+  {
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+  });
+
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
   options.UseNpgsql(
@@ -22,6 +28,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 );
 
 builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 builder.Services.AddHealthChecks();
 

@@ -37,6 +37,25 @@
       "env": {
         "DB_ENV": "dev"
       }
+    },
+    {
+      "name": "Launch w/ dev db debug",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "postDebugTask": "terminate-dotnet-watch",
+      "program": "${workspaceFolder}/bin/Debug/net9.0/ExigentDev.DIM.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+        "uriFormat": "%s/scalar"
+      },
+      "env": {
+        "DB_ENV": "dev"
+      }
     }
   ]
 }
