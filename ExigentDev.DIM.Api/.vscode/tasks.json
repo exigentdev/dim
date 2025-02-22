@@ -2,6 +2,18 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary;ForceNoAlign"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
       "label": "terminate-dotnet-watch",
       "type": "shell",
       "command": "kill -2 -- -$(ps -o pid,pgid,command -p $(lsof -ti:7200) | awk '/DIM/ {print $2}')",

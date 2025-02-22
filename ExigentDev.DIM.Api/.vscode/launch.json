@@ -23,6 +23,7 @@
       "name": "Launch w/ dev db",
       "type": "coreclr",
       "request": "launch",
+      "preLaunchTask": "build",
       "postDebugTask": "terminate-dotnet-watch",
       "program": "dotnet",
       "args": ["watch", "run"],

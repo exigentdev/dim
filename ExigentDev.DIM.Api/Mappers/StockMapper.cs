@@ -10,7 +10,7 @@ namespace ExigentDev.DIM.Api.Mappers
       return new StockDto
       {
         Id = stockModel.Id,
-        Symbol = stockModel.Symbol,
+        Symbol = stockModel.Symbol + "2342",
         CompanyName = stockModel.CompanyName,
         Purchase = stockModel.Purchase,
         LastDiv = stockModel.LastDiv,
