@@ -44,13 +44,6 @@ jobs:
       - name: Verify pushed image
         run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/exigentdevdimapi:latest
 
-      - name: Trigger Coolify deployment via webhook
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: ${{env.COOLIFY_URL}}/api/v1/deploy?uuid=${{env.COOLIFY_RESOURCE_ID}}&force=false
-          method: GET
-          bearerToken: ${{env.COOLIFY_API_TOKEN}}
-
       - name: Trigger Coolify Deployment
         run: |
           curl --request GET "${{ secrets.COOLIFY_WEBHOOK }}" \
