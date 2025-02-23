@@ -56,7 +56,9 @@ namespace ExigentDev.DIM.Api.Repositories
         }
       }
 
-      return await stocks.ToListAsync();
+      var skipNumber = (queryObject.PageNumber - 1) * queryObject.PageSize;
+
+      return await stocks.Skip(skipNumber).Take(queryObject.PageSize).ToListAsync();
     }
 
     public async Task<Stock?> GetByIdAsync(int id)
