@@ -1,3 +1,4 @@
+using ExigentDev.DIM.Api.Dtos.Comment;
 using ExigentDev.DIM.Api.Models;
 
 namespace ExigentDev.DIM.Api.Interfaces
@@ -6,5 +7,8 @@ namespace ExigentDev.DIM.Api.Interfaces
   {
     Task<List<Comment>> GetAllAsync();
     Task<Comment?> GetByIdAsync(int id);
+    Task<Comment> CreateAsync(Comment commentModel);
+    Task<Comment?> UpdateAsync(int id, UpdateCommentDto commentDto);
+    Task<Comment?> DeleteAsync(int id);
   }
 }

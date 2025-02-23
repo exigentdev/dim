@@ -1,5 +1,6 @@
 using ExigentDev.DIM.Api.Data;
 using ExigentDev.DIM.Api.Dtos.Stock;
+using ExigentDev.DIM.Api.Helpers;
 using ExigentDev.DIM.Api.Interfaces;
 using ExigentDev.DIM.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -32,9 +33,21 @@ namespace ExigentDev.DIM.Api.Repositories
       return stockModel;
     }
 
-    public async Task<List<Stock>> GetAllAsync()
+    public async Task<List<Stock>> GetAllAsync(QueryObject queryObject)
     {
-      return await _context.Stocks.Include(c => c.Comments).ToListAsync();
+      var stocks = _context.Stocks.Include(c => c.Comments).AsQueryable();
+
+      if (!string.IsNullOrWhiteSpace(queryObject.CompanyName))
+      {
+        stocks = stocks.Where(s => s.CompanyName.Contains(queryObject.CompanyName));
+      }
+
+      if (!string.IsNullOrWhiteSpace(queryObject.Symbol))
+      {
+        stocks = stocks.Where(s => s.Symbol.Contains(queryObject.Symbol));
+      }
+
+      return await stocks.ToListAsync();
     }
 
     public async Task<Stock?> GetByIdAsync(int id)
@@ -42,7 +55,7 @@ namespace ExigentDev.DIM.Api.Repositories
       return await _context.Stocks.Include(c => c.Comments).FirstOrDefaultAsync(s => s.Id == id);
     }
 
-    public async Task<Stock?> UpdateAsync(int id, UpdateStockRequestDto stockDto)
+    public async Task<Stock?> UpdateAsync(int id, UpdateStockDto stockDto)
     {
       var existingStock = await _context.Stocks.FindAsync(id);
       if (existingStock == null)
@@ -54,6 +67,11 @@ namespace ExigentDev.DIM.Api.Repositories
       await _context.SaveChangesAsync();
 
       return existingStock;
+    }
+
+    public Task<bool> StockExists(int id)
+    {
+      return _context.Stocks.AnyAsync(s => s.Id == id);
     }
   }
 }

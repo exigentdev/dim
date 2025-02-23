@@ -20,7 +20,7 @@ namespace ExigentDev.DIM.Api.Mappers
       };
     }
 
-    public static Stock ToStockFromCreateDTO(this CreateStockRequestDto stockDto)
+    public static Stock ToStockFromCreateDto(this CreateStockDto stockDto)
     {
       return new Stock
       {
