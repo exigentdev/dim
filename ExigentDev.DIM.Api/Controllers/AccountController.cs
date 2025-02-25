@@ -1,4 +1,5 @@
 using ExigentDev.DIM.Api.Dtos.Account;
+using ExigentDev.DIM.Api.Interfaces;
 using ExigentDev.DIM.Api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,9 +8,11 @@ namespace ExigentDev.DIM.Api.Controllers
 {
   [Route("api/account")]
   [ApiController]
-  public class AccountController(UserManager<AppUser> userManager) : ControllerBase
+  public class AccountController(UserManager<AppUser> userManager, ITokenService tokenService)
+    : ControllerBase
   {
     private readonly UserManager<AppUser> _userManager = userManager;
+    private readonly ITokenService _tokenService = tokenService;
 
     [HttpPost("register")]
     public async Task<IActionResult> register([FromBody] RegisterDto registerDto)
@@ -29,7 +32,14 @@ namespace ExigentDev.DIM.Api.Controllers
           var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
           if (roleResult.Succeeded)
           {
-            return Ok("User Created");
+            return Ok(
+              new NewUserDto
+              {
+                UserName = appUser.UserName!,
+                Email = appUser.Email!,
+                Token = _tokenService.CreateToken(appUser),
+              }
+            );
           }
           else
           {

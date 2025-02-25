@@ -2,6 +2,7 @@ using ExigentDev.DIM.Api.Data;
 using ExigentDev.DIM.Api.Interfaces;
 using ExigentDev.DIM.Api.Models;
 using ExigentDev.DIM.Api.Repositories;
+using ExigentDev.DIM.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -73,6 +74,7 @@ builder
 
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddHealthChecks();
 
