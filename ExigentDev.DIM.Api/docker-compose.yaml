@@ -8,6 +8,9 @@ services:
       - "3006:5190"
     environment:
       - DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
+      - JWT_ISSUER=${JWT_ISSUER}
+      - JWT_AUDIENCE=${JWT_AUDIENCE}
+      - JWT_SIGNINGKEY=${JWT_SIGNINGKEY}
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:5190/health"]
       interval: 30s
