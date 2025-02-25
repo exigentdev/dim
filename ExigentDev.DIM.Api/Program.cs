@@ -91,7 +91,6 @@ if (app.Environment.IsDevelopment())
   app.MapScalarApiReference(options =>
   {
     options
-      .WithTitle("Weather Forecast API")
       .WithTheme(ScalarTheme.Saturn)
       .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
   });
