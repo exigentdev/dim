@@ -3,6 +3,7 @@ using ExigentDev.DIM.Api.Interfaces;
 using ExigentDev.DIM.Api.Models;
 using ExigentDev.DIM.Api.Repositories;
 using ExigentDev.DIM.Api.Services;
+using ExigentDev.DIM.Api.Transformers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,13 @@ builder
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
   });
 
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(
+  "v1",
+  options =>
+  {
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+  }
+);
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
   options.UseNpgsql(
     builder.Configuration.GetConnectionString("DefaultConnection") ?? connectionString

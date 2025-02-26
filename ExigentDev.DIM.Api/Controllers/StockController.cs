@@ -2,6 +2,7 @@ using ExigentDev.DIM.Api.Dtos.Stock;
 using ExigentDev.DIM.Api.Helpers;
 using ExigentDev.DIM.Api.Interfaces;
 using ExigentDev.DIM.Api.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExigentDev.DIM.Api.Controllers
@@ -12,6 +13,7 @@ namespace ExigentDev.DIM.Api.Controllers
   {
     private readonly IStockRepository _stockRepo = stockRepo;
 
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] QueryObject queryObject)
     {
