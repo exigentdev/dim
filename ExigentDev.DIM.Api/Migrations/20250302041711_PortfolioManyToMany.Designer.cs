@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExigentDev.DIM.Api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20250302034209_PortfolioManyToMany")]
+    [Migration("20250302041711_PortfolioManyToMany")]
     partial class PortfolioManyToMany
     {
         /// <inheritdoc />
