@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using ExigentDev.DIM.Api.Extensions;
 using ExigentDev.DIM.Api.Interfaces;
 using ExigentDev.DIM.Api.Models;
 using Microsoft.AspNetCore.Authorization;
