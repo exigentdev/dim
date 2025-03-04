@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ExigentDev.DIM.Api.Extensions;
 using ExigentDev.DIM.Api.Interfaces;
 using ExigentDev.DIM.Api.Models;
@@ -12,19 +13,21 @@ namespace ExigentDev.DIM.Api.Controllers
   public class PortfolioController(
     UserManager<AppUser> userManager,
     IStockRepository stockRepository,
-    IPortfolioRepository portfolioRepository
+    IPortfolioRepository portfolioRepository,
+    IHttpContextAccessor httpContextAccessor
   ) : ControllerBase
   {
     private readonly UserManager<AppUser> _userManager = userManager;
     private readonly IStockRepository _stockRepository = stockRepository;
     private readonly IPortfolioRepository _portfolioRepository = portfolioRepository;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
     [HttpGet]
     [Authorize]
     public async Task<IActionResult> GetUserPortfolio()
     {
-      var username = User.GetUsername();
-      var appUser = await _userManager.FindByNameAsync(username);
+      var username = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.GivenName);
+      var appUser = await _userManager.FindByNameAsync(username!);
 
       var userPortfolio = await _portfolioRepository.GetUserPortfolio(appUser!);
 
@@ -35,8 +38,8 @@ namespace ExigentDev.DIM.Api.Controllers
     [Authorize]
     public async Task<IActionResult> AddPortfolio(string symbol)
     {
-      var username = User.GetUsername();
-      var appUser = await _userManager.FindByNameAsync(username);
+      var username = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.GivenName);
+      var appUser = await _userManager.FindByNameAsync(username!);
 
       var stock = await _stockRepository.GetBySymbolAsync(symbol);
 
