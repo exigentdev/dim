@@ -32,29 +32,27 @@ namespace ExigentDev.DIM.Api.Controllers
         var appUser = new AppUser { UserName = registerDto.Username, Email = registerDto.Email };
 
         var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password!);
-        if (createdUser.Succeeded)
-        {
-          var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
-          if (roleResult.Succeeded)
-          {
-            return Ok(
-              new NewUserDto
-              {
-                UserName = appUser.UserName!,
-                Email = appUser.Email!,
-                Token = _tokenService.CreateToken(appUser),
-              }
-            );
-          }
-          else
-          {
-            return BadRequest(roleResult.Errors);
-          }
-        }
-        else
+
+        if (!createdUser.Succeeded)
         {
           return BadRequest(createdUser.Errors);
         }
+
+        var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
+
+        if (!roleResult.Succeeded)
+        {
+          return BadRequest(roleResult.Errors);
+        }
+
+        return Ok(
+          new NewUserDto
+          {
+            UserName = appUser.UserName!,
+            Email = appUser.Email!,
+            Token = _tokenService.CreateToken(appUser),
+          }
+        );
       }
       catch (Exception e)
       {

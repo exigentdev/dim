@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace ExigentDev.DIM.Api.Dtos.Account
 {
   public class NewUserDto

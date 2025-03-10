@@ -18,7 +18,7 @@ var dbDevString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING_DEV")
 var authIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
 var authAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
 var authSigningKey = Environment.GetEnvironmentVariable("JWT_SIGNINGKEY");
-var connectionString = dbEnv == "dev" ? dbDevString : dbProdString;
+var connectionString = dbEnv == "dev" ? dbDevString : dbDevString;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +36,7 @@ builder.Services.AddOpenApi(
     options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
   }
 );
+
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
   options.UseNpgsql(
     builder.Configuration.GetConnectionString("DefaultConnection") ?? connectionString
@@ -79,15 +80,16 @@ builder
     };
   });
 
-builder.Services.AddScoped<IStockRepository, StockRepository>();
-builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IDogRepository, DogRepository>();
+builder.Services.AddScoped<IDogImageRepository, DogImageRepository>();
 
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
+// perform all migrations before running
 using (var scope = app.Services.CreateScope())
 {
   var db = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();

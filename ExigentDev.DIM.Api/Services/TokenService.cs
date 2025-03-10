@@ -35,6 +35,7 @@ namespace ExigentDev.DIM.Api.Services
     {
       var claims = new List<Claim>
       {
+        new(ClaimTypes.Name, appUser.UserName!),
         new(JwtRegisteredClaimNames.Email, appUser.Email!),
         new(JwtRegisteredClaimNames.GivenName, appUser.UserName!),
       };
