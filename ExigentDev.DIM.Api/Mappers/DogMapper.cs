@@ -1,5 +1,4 @@
 using ExigentDev.DIM.Api.Dtos.Dog;
-using ExigentDev.DIM.Api.Dtos.Post;
 using ExigentDev.DIM.Api.Models;
 
 namespace ExigentDev.DIM.Api.Mappers
@@ -16,7 +15,7 @@ namespace ExigentDev.DIM.Api.Mappers
         Comment = dogModel.Comment,
         Breed = dogModel.Breed,
         Name = dogModel.Name,
-        DogImages = dogModel.DogImages,
+        DogImages = [.. dogModel.DogImages.Select(dogImage => dogImage.ToDogImageDto())],
       };
     }
   }

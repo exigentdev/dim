@@ -13,10 +13,7 @@ namespace ExigentDev.DIM.Api.Mappers
         DateCreated = postModel.DateCreated,
         AppUser = postModel.AppUser.ToAppUserDto(),
         Dog = postModel.Dog.ToDogDto(),
-        LikedByUsers =
-        [
-          .. postModel.LikedPosts.Select(likedPost => likedPost.AppUser.ToAppUserDto()),
-        ],
+        LikedByUsers = [.. postModel.LikedPosts.Select(likedPost => likedPost.ToLikedPostDto())],
       };
     }
 

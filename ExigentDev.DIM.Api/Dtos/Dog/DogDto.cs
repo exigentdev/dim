@@ -1,4 +1,4 @@
-using ExigentDev.DIM.Api.Models;
+using ExigentDev.DIM.Api.Dtos.DogImage;
 
 namespace ExigentDev.DIM.Api.Dtos.Dog
 {
@@ -10,6 +10,6 @@ namespace ExigentDev.DIM.Api.Dtos.Dog
     public string Comment { get; set; } = string.Empty;
     public string Breed { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
-    public List<DogImage> DogImages { get; set; } = [];
+    public List<DogImageDto> DogImages { get; set; } = [];
   }
 }

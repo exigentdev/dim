@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ExigentDev.DIM.Api.Models
 {
+  [Table("DogImage")]
   public class DogImage
   {
     public int Id { get; set; }
