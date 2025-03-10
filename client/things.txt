@@ -1,0 +1,7 @@
+vite
+react
+typescript
+tanstack router
+tailwind
+rtk-query
+shadcn
