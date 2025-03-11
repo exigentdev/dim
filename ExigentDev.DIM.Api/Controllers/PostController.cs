@@ -59,7 +59,7 @@ namespace ExigentDev.DIM.Api.Controllers
       return Ok(postModel.ToPostDto());
     }
 
-    [Authorize]
+    // [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePostDto createPostDto)
     {
