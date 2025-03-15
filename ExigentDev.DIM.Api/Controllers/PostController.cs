@@ -60,7 +60,7 @@ namespace ExigentDev.DIM.Api.Controllers
     }
 
     // [Authorize]
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CreatePostDto createPostDto)
     {
       if (!ModelState.IsValid)
@@ -71,7 +71,7 @@ namespace ExigentDev.DIM.Api.Controllers
       var username = User.Identity?.Name;
       if (username == null)
       {
-        return BadRequest("Username not found");
+        return BadRequest("UserName not found");
       }
 
       var appUser = await _userManager.FindByNameAsync(username);

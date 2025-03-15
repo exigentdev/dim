@@ -1,15 +1,21 @@
+const TOKENKEY = 'jwt-token';
+
 export const useAuth = () => {
-  const signIn = () => {
-    localStorage.setItem('isAuthenticated', 'true');
+  const logout = () => {
+    localStorage.removeItem(TOKENKEY);
   };
 
-  const signOut = () => {
-    localStorage.removeItem('isAuthenticated');
+  const login = (token: string) => {
+    localStorage.setItem(TOKENKEY, token);
   };
 
-  const isLogged = () => localStorage.getItem('isAuthenticated') === 'true';
+  const getToken = () => {
+    localStorage.getItem(TOKENKEY);
+  };
 
-  return { signIn, signOut, isLogged };
+  const isLoggedIn = () => localStorage.getItem(TOKENKEY) !== null;
+
+  return { login, logout, isLoggedIn, getToken };
 };
 
 export type AuthContext = ReturnType<typeof useAuth>;

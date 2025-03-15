@@ -5,7 +5,7 @@ namespace ExigentDev.DIM.Api.Dtos.Account
   public class RegisterDto
   {
     [Required]
-    public string? Username { get; set; }
+    public string? UserName { get; set; }
 
     [Required]
     [EmailAddress]

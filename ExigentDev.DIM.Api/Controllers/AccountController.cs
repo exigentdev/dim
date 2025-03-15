@@ -29,7 +29,7 @@ namespace ExigentDev.DIM.Api.Controllers
           return BadRequest();
         }
 
-        var appUser = new AppUser { UserName = registerDto.Username, Email = registerDto.Email };
+        var appUser = new AppUser { UserName = registerDto.UserName, Email = registerDto.Email };
 
         var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password!);
 
@@ -69,19 +69,19 @@ namespace ExigentDev.DIM.Api.Controllers
       }
 
       var user = await _userManager.Users.FirstOrDefaultAsync(user =>
-        user.UserName == loginDto.Username
+        user.UserName == loginDto.UserName
       );
 
       if (user == null)
       {
-        return Unauthorized("Invalid username");
+        return BadRequest("Invalid UserName");
       }
 
       var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
       if (!result.Succeeded)
       {
-        return Unauthorized("Username not found and/or password incorrect");
+        return BadRequest("UserName not found and/or password is incorrect");
       }
 
       return Ok(
