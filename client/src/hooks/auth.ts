@@ -1,4 +1,4 @@
-const TOKENKEY = 'jwt-token';
+import { TOKENKEY } from '@/utils/constants';
 
 export const useAuth = () => {
   const logout = () => {

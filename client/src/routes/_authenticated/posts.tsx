@@ -1,4 +1,4 @@
-import { fetchPosts } from '@/api/fetchPosts';
+import { fetchPosts } from '@/api/posts';
 import { Card, CardContent } from '@/components/ui/card';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
@@ -25,7 +25,7 @@ function Posts() {
     <div className="mx-auto max-w-2xl">
       <div className="space-y-6">
         {data.map((post) => (
-          <Card>
+          <Card key={post.id}>
             <CardContent>
               <p>{post.dateCreated.toString()}</p>
             </CardContent>

@@ -5,13 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { CreatePostModal } from './create-post-modal';
 import { useState } from 'react';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from './ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from './ui/sheet';
 
 interface SimpleNavBarProps {
   isLoggedIn?: boolean;
