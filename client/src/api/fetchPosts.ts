@@ -1,8 +1,16 @@
+import axios, { AxiosResponse } from 'axios';
 import { PostDto } from '../../types/post-dto';
+const TOKENKEY = 'jwt-token';
 
-export const fetchPosts = async (): Promise<PostDto> => {
-  const res = await fetch('/api/post/1');
-  if (!res.ok) throw new Error('Failed to fetch posts');
-  const data = res.json();
-  return data as unknown as PostDto;
+export const fetchPosts = async (): Promise<PostDto[]> => {
+  const token = localStorage.getItem(TOKENKEY);
+
+  const { data } = await axios.get<undefined, AxiosResponse<PostDto[]>>(
+    '/api/post',
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
+
+  return data;
 };

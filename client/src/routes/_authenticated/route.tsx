@@ -1,4 +1,4 @@
-import { SimpleNavBar } from '@/components/ui/simple-nav-bar';
+import { SimpleNavBar } from '@/components/simple-nav-bar';
 import { useAuth } from '@/hooks/auth';
 import {
   createFileRoute,
@@ -27,7 +27,7 @@ function Authenticated() {
   };
 
   return (
-    <div>
+    <div className="min-h-screen">
       <SimpleNavBar isLoggedIn={auth.isLoggedIn()} onLogout={logout} />
       <Outlet />
     </div>

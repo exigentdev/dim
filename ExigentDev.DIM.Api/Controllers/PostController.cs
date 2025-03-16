@@ -24,7 +24,7 @@ namespace ExigentDev.DIM.Api.Controllers
     private readonly IDogRepository _dogRepository = dogRepository;
     private readonly IDogImageRepository _dogImageRepository = dogImageRepository;
 
-    // [Authorize]
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] QueryObject queryObject)
     {
@@ -40,7 +40,7 @@ namespace ExigentDev.DIM.Api.Controllers
       return Ok(posts);
     }
 
-    // [Authorize]
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
@@ -59,7 +59,7 @@ namespace ExigentDev.DIM.Api.Controllers
       return Ok(postModel.ToPostDto());
     }
 
-    // [Authorize]
+    [Authorize]
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CreatePostDto createPostDto)
     {

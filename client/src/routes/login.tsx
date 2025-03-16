@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { LoginDto } from '../../types/login-dto';
 import { loginUser } from '@/api/authentication';
-import { SimpleNavBar } from '@/components/ui/simple-nav-bar';
+import { SimpleNavBar } from '@/components/simple-nav-bar';
 
 export const Route = createFileRoute('/login')({
   component: Login,

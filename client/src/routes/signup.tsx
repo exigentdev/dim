@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { SignupForm } from '@/components/signup-form';
-import { SimpleNavBar } from '@/components/ui/simple-nav-bar';
+import { SimpleNavBar } from '@/components/simple-nav-bar';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { registerUser } from '@/api/authentication';
@@ -77,7 +77,7 @@ function Signup() {
 
     if (registerInfoResult.success) {
       const registerDto: RegisterDto = {
-        username: registerInfoResult.data.username,
+        userName: registerInfoResult.data.username,
         email: registerInfoResult.data.email,
         password: registerInfoResult.data.password,
       };
