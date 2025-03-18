@@ -1,5 +1,4 @@
 import { ImageIcon, X } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -12,16 +11,21 @@ import {
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 import { useRef, useState } from 'react';
-import {
-  S3Client,
-  PutObjectCommand,
-  PutObjectRequest,
-} from '@aws-sdk/client-s3';
 import { decodeJWT } from '@/utils';
-import { v4 as uuidv4 } from 'uuid';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPost } from '@/api/posts';
 import { CreatePostDto } from 'types/create-post-dto';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { useStorage } from '@/context/storage/StorageContext';
+import { Rating } from './ui/rating';
+import { Label } from './ui/label';
+
+const createPostSchema = z.object({
+  comment: z.string().min(1),
+  breed: z.string(),
+  name: z.string(),
+});
 
 type CreatePostModalProps = {
   open: boolean;
@@ -33,6 +37,8 @@ export function CreatePostModal(props: CreatePostModalProps) {
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer>();
   const [file, setFile] = useState<File>();
   const queryClient = useQueryClient();
+  const storageService = useStorage();
+  const [ratingNum, setRatingNum] = useState(5);
 
   const postMutation = useMutation({
     mutationKey: ['createPost'],
@@ -45,53 +51,37 @@ export function CreatePostModal(props: CreatePostModalProps) {
     },
   });
 
-  const handleSubmit = async () => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (!file) {
-      throw Error('File is undefined');
+      toast.error('No image selected. Please choose an image.');
+
+      return;
     }
 
-    // TODO: move these to .env
-    const bucketName = 'dim-image-bucket';
-    const region = 'us-east-2';
-    const accessKeyId = '';
-    const secretAccessKey = '';
+    const formData = new FormData(event.currentTarget);
+    const createPostInfo = Object.fromEntries(formData.entries());
+    const createPostInfoResult = createPostSchema.safeParse(createPostInfo);
+
+    if (!createPostInfoResult.success) {
+      createPostInfoResult.error.errors.forEach((error) => {
+        toast.error(error.message);
+      });
+
+      return;
+    }
 
     const { given_name: username } = decodeJWT();
 
-    const client = new S3Client({
-      region,
-      credentials: {
-        accessKeyId,
-        secretAccessKey,
-      },
-      requestChecksumCalculation: 'WHEN_REQUIRED',
-    });
-
-    const uuid = uuidv4();
-
-    const params: PutObjectRequest = {
-      Bucket: bucketName,
-      Key: `postimage/${username}/${uuid}`,
-      Body: file,
-      ContentType: file.type,
-    };
-
-    try {
-      const command = new PutObjectCommand(params);
-      await client.send(command);
-    } catch (error) {
-      throw Error('failed to upload image');
-    }
-
-    const url = `https://${bucketName}.s3.${region}.amazonaws.com/postimage/${username}/${uuid}`;
+    const url = await storageService.uploadFile(file, username);
 
     const createPostDto: CreatePostDto = {
       dogImageUrls: [url],
       dateMet: new Date(),
-      breed: 'test',
-      comment: 'test',
-      name: 'test',
-      rating: 4,
+      comment: createPostInfoResult.data.comment,
+      breed: createPostInfoResult.data.breed,
+      name: createPostInfoResult.data.name,
+      rating: ratingNum,
     };
 
     postMutation.mutate(createPostDto);
@@ -124,50 +114,73 @@ export function CreatePostModal(props: CreatePostModalProps) {
     setFile(undefined);
   };
 
+  const onStarClick = (index: number) => {
+    setRatingNum(index + 1);
+  };
+
   return (
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
-      <DialogContent aria-describedby="">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Create Post</DialogTitle>
           <DialogDescription>Share your favorite dogs!</DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-3 py-4">
-          <div className="flex gap-3">
-            <div className="my-2">
-              <Avatar>
-                <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
-                />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </div>
-            <Textarea
-              className="min-h-[100px] resize-none border-none p-4 shadow-none focus-visible:ring-0"
-              placeholder="Tell us about the bestest doggo!"
-              name="comment"
-            />
-          </div>
-          {imagePreview && (
-            <div className="mt-3 flex justify-center overflow-hidden rounded-md">
-              <div className="relative">
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  className="absolute top-1 right-1 h-8 w-8 rounded-full opacity-90"
-                  onClick={handleRemoveImage}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-                <img
-                  src={imagePreview as string}
-                  alt="Post preview"
-                  className="h-auto max-h-[150px] object-contain"
+        <form id="create-form" onSubmit={onSubmit}>
+          <div className="grid gap-3 py-4">
+            <div className="grid gap-3">
+              <div>
+                <Textarea
+                  className="min-h-[100px] resize-none border-none p-4 shadow-none focus-visible:ring-0"
+                  placeholder="Tell us about the bestest doggo!"
+                  name="comment"
                 />
               </div>
+              <div className="grid w-full gap-1.5">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  className="border-none shadow-none focus-visible:ring-0"
+                  id="name"
+                  placeholder="LeBark James"
+                  name="name"
+                />
+              </div>
+              <div className="grid w-full gap-1.5">
+                <Label htmlFor="breed">Breed</Label>
+                <Input
+                  className="border-none shadow-none focus-visible:ring-0"
+                  id="breed"
+                  placeholder="Poodle"
+                  name="breed"
+                />
+              </div>
+              <div className="grid grid-cols-[auto_1fr] items-center gap-3">
+                <Label className="text-base" htmlFor="rating">
+                  Rating:
+                </Label>
+                <Rating rating={ratingNum} onClick={onStarClick} />
+              </div>
             </div>
-          )}
-        </div>
+            {imagePreview && (
+              <div className="mt-3 flex justify-center overflow-hidden rounded-md">
+                <div className="relative">
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    className="absolute top-1 right-1 h-8 w-8 rounded-full opacity-90"
+                    onClick={handleRemoveImage}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                  <img
+                    src={imagePreview as string}
+                    alt="Post preview"
+                    className="h-auto max-h-[150px] object-contain"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        </form>
         <DialogFooter className="flex flex-row items-center justify-between sm:justify-between">
           <Button
             variant="outline"
@@ -186,7 +199,7 @@ export function CreatePostModal(props: CreatePostModalProps) {
             onChange={onImageInputChange}
             ref={fileInputRef}
           />
-          <Button type="submit" onClick={handleSubmit}>
+          <Button type="submit" form="create-form">
             Post
           </Button>
         </DialogFooter>

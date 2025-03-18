@@ -43,18 +43,20 @@ function Login() {
     const loginInfo = Object.fromEntries(formData.entries());
     const loginInfoResult = loginSchema.safeParse(loginInfo);
 
-    if (loginInfoResult.success) {
-      const loginDto: LoginDto = {
-        userName: loginInfoResult.data.username,
-        password: loginInfoResult.data.password,
-      };
-
-      loginMutation.mutate(loginDto);
-    } else {
+    if (!loginInfoResult.success) {
       loginInfoResult.error.errors.forEach((error) => {
         toast.error(error.message);
       });
+
+      return;
     }
+
+    const loginDto: LoginDto = {
+      userName: loginInfoResult.data.username,
+      password: loginInfoResult.data.password,
+    };
+
+    loginMutation.mutate(loginDto);
   };
 
   return (
