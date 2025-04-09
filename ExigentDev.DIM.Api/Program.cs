@@ -18,7 +18,7 @@ var dbDevString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING_DEV")
 var authIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
 var authAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
 var authSigningKey = Environment.GetEnvironmentVariable("JWT_SIGNINGKEY");
-var connectionString = dbEnv == "dev" ? dbDevString : dbDevString;
+var connectionString = dbEnv == "dev" ? dbDevString : dbProdString;
 
 var builder = WebApplication.CreateBuilder(args);
 
