@@ -86,6 +86,7 @@ builder
   });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ILikedPostRepository, LikedPostRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IDogRepository, DogRepository>();
 builder.Services.AddScoped<IDogImageRepository, DogImageRepository>();

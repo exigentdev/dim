@@ -38,6 +38,7 @@ namespace ExigentDev.DIM.Api.Services
         new(ClaimTypes.Name, appUser.UserName!),
         new(JwtRegisteredClaimNames.Email, appUser.Email!),
         new(JwtRegisteredClaimNames.GivenName, appUser.UserName!),
+        new(JwtRegisteredClaimNames.Sub, appUser.Id),
       };
 
       var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

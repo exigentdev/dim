@@ -23,13 +23,14 @@ import { ScrollArea } from './ui/scroll-area';
 
 const createPostSchema = z.object({
   comment: z.string().min(1, { message: 'Please enter a comment' }),
-  breed: z.string(),
-  name: z.string(),
+  breed: z.string().min(1, { message: 'Please enter a breed' }),
+  name: z.string().min(1, { message: 'Please enter a name' }),
 });
 
 type CreatePostModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onCreatePostSuccess: () => void;
 };
 
 export function CreatePostModal(props: CreatePostModalProps) {
@@ -45,6 +46,7 @@ export function CreatePostModal(props: CreatePostModalProps) {
     mutationFn: createPost,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] });
+      props.onCreatePostSuccess();
     },
     onError: (error) => {
       console.error(error);
@@ -83,6 +85,15 @@ export function CreatePostModal(props: CreatePostModalProps) {
     };
 
     postMutation.mutate(createPostDto);
+    handleRemoveImage();
+    setRatingNum(5);
+  };
+
+  const onOpenChange = (open: boolean) => {
+    if (!open) {
+      handleRemoveImage();
+    }
+    props.onOpenChange(open);
   };
 
   const onImageInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,7 +131,7 @@ export function CreatePostModal(props: CreatePostModalProps) {
   };
 
   return (
-    <Dialog open={props.open} onOpenChange={props.onOpenChange}>
+    <Dialog open={props.open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-screen">
         <DialogHeader>
           <DialogTitle>Create Post</DialogTitle>

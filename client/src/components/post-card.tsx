@@ -5,15 +5,20 @@ import { PostDto } from 'types/post-dto';
 import { Button } from './ui/button';
 import { Heart } from 'lucide-react';
 import { SlidingNumber } from './animate-ui/sliding-number';
+import { decodeJWT } from '@/utils';
 
 interface PostCardProps {
   post: PostDto;
+  onLikeClick: (postId: number) => void;
 }
 
 export const PostCard = (props: PostCardProps) => {
+  const { sub: userId } = decodeJWT();
   const { post } = props;
 
-  const onLikeClick = () => {};
+  const onLikeClick = () => {
+    props.onLikeClick(post.id);
+  };
 
   return (
     <Card key={post.id}>
@@ -43,11 +48,18 @@ export const PostCard = (props: PostCardProps) => {
               year: 'numeric',
             })}
           </p>
+          <p className="p-3">"{post.dog.comment}"</p>
         </div>
       </CardContent>
       <CardFooter className="justify-end">
         <Button onClick={onLikeClick}>
-          <Heart fill="#000000" />
+          <Heart
+            fill={
+              post.likedByUsers.some((user) => user.appUserId === userId)
+                ? 'currentColor'
+                : 'none'
+            }
+          />
           Like
           <SlidingNumber number={post.likedByUsers.length} />
         </Button>

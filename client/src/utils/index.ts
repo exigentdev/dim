@@ -4,6 +4,7 @@ interface JWTClaims {
   given_name: string;
   email: string;
   exp: number;
+  sub: string;
 }
 
 export function decodeJWT(): JWTClaims {

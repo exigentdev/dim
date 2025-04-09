@@ -1,7 +1,6 @@
 import { Menu, PlusCircle } from 'lucide-react';
 import logoSvg from '../assets/logo.svg';
 import { ModeToggle } from './mode-toggle';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { CreatePostModal } from './create-post-modal';
 import { useState } from 'react';
@@ -31,6 +30,10 @@ export const SimpleNavBar = (props: SimpleNavBarProps) => {
 
   const onCreatePostButtonClick = () => {
     setCreatePostModalOpen(true);
+  };
+
+  const onCreatePostSuccess = () => {
+    setCreatePostModalOpen(false);
   };
 
   return (
@@ -127,6 +130,7 @@ export const SimpleNavBar = (props: SimpleNavBarProps) => {
       <CreatePostModal
         open={createPostModalOpen}
         onOpenChange={setCreatePostModalOpen}
+        onCreatePostSuccess={onCreatePostSuccess}
       />
     </section>
   );

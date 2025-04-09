@@ -1,6 +1,6 @@
-import { fetchPosts } from '@/api/posts';
+import { fetchPosts, likePost } from '@/api/posts';
 import { PostCard } from '@/components/post-card';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_authenticated/posts')({
@@ -8,10 +8,25 @@ export const Route = createFileRoute('/_authenticated/posts')({
 });
 
 function Posts() {
+  const queryClient = useQueryClient();
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['posts'],
     queryFn: fetchPosts,
   });
+
+  const { mutate } = useMutation({
+    mutationKey: ['likedPost'],
+    mutationFn: likePost,
+    // TODO: def don't do this, refetches all the posts when liking
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    },
+  });
+
+  const onLikeClick = (postId: number) => {
+    mutate({ postId });
+  };
 
   if (isPending) {
     return <span>Loading...</span>;
@@ -24,8 +39,8 @@ function Posts() {
   return (
     <div className="mx-auto max-w-2xl p-3">
       <div className="space-y-6">
-        {data.map((post) => (
-          <PostCard post={post} />
+        {[...data].reverse().map((post) => (
+          <PostCard key={post.id} post={post} onLikeClick={onLikeClick} />
         ))}
       </div>
     </div>

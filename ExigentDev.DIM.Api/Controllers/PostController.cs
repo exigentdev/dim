@@ -1,4 +1,4 @@
-using System.Security.Claims;
+using ExigentDev.DIM.Api.Dtos.LikedPost;
 using ExigentDev.DIM.Api.Dtos.Post;
 using ExigentDev.DIM.Api.Helpers;
 using ExigentDev.DIM.Api.Interfaces;
@@ -16,13 +16,15 @@ namespace ExigentDev.DIM.Api.Controllers
     UserManager<AppUser> userManager,
     IPostRepository postRepository,
     IDogRepository dogRepository,
-    IDogImageRepository dogImageRepository
+    IDogImageRepository dogImageRepository,
+    ILikedPostRepository likedPostRepository
   ) : ControllerBase
   {
     private readonly UserManager<AppUser> _userManager = userManager;
     private readonly IPostRepository _postRepository = postRepository;
     private readonly IDogRepository _dogRepository = dogRepository;
     private readonly IDogImageRepository _dogImageRepository = dogImageRepository;
+    private readonly ILikedPostRepository _likedPostRepository = likedPostRepository;
 
     [Authorize]
     [HttpGet]
@@ -94,6 +96,45 @@ namespace ExigentDev.DIM.Api.Controllers
       await _postRepository.CreateAsync(postModel);
 
       return CreatedAtAction(nameof(GetById), new { id = postModel.Id }, new { id = postModel.Id });
+    }
+
+    [Authorize]
+    [HttpPost("likePost")]
+    public async Task<IActionResult> LikePost([FromBody] LikePostDto likePostDto)
+    {
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
+
+      var username = User.Identity?.Name;
+      if (username == null)
+      {
+        return BadRequest("UserName not found");
+      }
+
+      var appUser = await _userManager.FindByNameAsync(username);
+      if (appUser == null)
+      {
+        return BadRequest("User not found");
+      }
+
+      var appUserId = appUser.Id;
+
+      var likedPostModel = new LikedPost { AppUserId = appUserId, PostId = likePostDto.PostId };
+
+      var likedPost = await _likedPostRepository.FindLikedPostAsync(likedPostModel);
+
+      if (likedPost == null)
+      {
+        await _likedPostRepository.LikePostAsync(likedPostModel);
+      }
+      else
+      {
+        await _likedPostRepository.UnlikePostAsync(likedPost);
+      }
+
+      return Ok();
     }
   }
 }
