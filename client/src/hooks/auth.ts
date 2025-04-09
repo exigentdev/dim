@@ -1,3 +1,4 @@
+import { decodeJWT } from '@/utils';
 import { TOKENKEY } from '@/utils/constants';
 
 export const useAuth = () => {
@@ -13,7 +14,13 @@ export const useAuth = () => {
     localStorage.getItem(TOKENKEY);
   };
 
-  const isLoggedIn = () => localStorage.getItem(TOKENKEY) !== null;
+  const isLoggedIn = () => {
+    const jwt = decodeJWT();
+
+    return (
+      localStorage.getItem(TOKENKEY) !== null && jwt.exp * 1000 > Date.now()
+    );
+  };
 
   return { login, logout, isLoggedIn, getToken };
 };

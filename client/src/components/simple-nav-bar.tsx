@@ -5,7 +5,17 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { CreatePostModal } from './create-post-modal';
 import { useState } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTrigger } from './ui/sheet';
+import Avvvatars from 'avvvatars-react';
+
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from './ui/sheet';
+import { decodeJWT } from '@/utils';
 
 interface SimpleNavBarProps {
   isLoggedIn?: boolean;
@@ -16,6 +26,8 @@ interface SimpleNavBarProps {
 export const SimpleNavBar = (props: SimpleNavBarProps) => {
   const [createPostModalOpen, setCreatePostModalOpen] =
     useState<boolean>(false);
+
+  const { given_name } = props.isLoggedIn ? decodeJWT() : {};
 
   const onCreatePostButtonClick = () => {
     setCreatePostModalOpen(true);
@@ -42,13 +54,7 @@ export const SimpleNavBar = (props: SimpleNavBarProps) => {
                   <PlusCircle className="h-4 w-4" />
                   Create Post
                 </Button>
-                <Avatar>
-                  <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt="@shadcn"
-                  />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
+                <Avvvatars value={given_name!} />
                 <Button variant={'outline'} onClick={props.onLogout}>
                   Logout
                 </Button>
@@ -67,6 +73,10 @@ export const SimpleNavBar = (props: SimpleNavBarProps) => {
                 </SheetTrigger>
                 <SheetContent className="w-[300px] overflow-y-auto md:w-[540px]">
                   <SheetHeader className="flex flex-row justify-between">
+                    <SheetTitle className="hidden">Sidebar</SheetTitle>
+                    <SheetDescription className="hidden">
+                      Sidebar
+                    </SheetDescription>
                     <div className="flex items-center gap-6">
                       <a href={''} className="flex items-center gap-2">
                         <img
@@ -83,14 +93,8 @@ export const SimpleNavBar = (props: SimpleNavBarProps) => {
                   <div className="flex flex-1 flex-col gap-4">
                     <div className="flex items-center justify-between p-4">
                       <div className="flex items-center gap-2">
-                        <Avatar>
-                          <AvatarImage
-                            src="https://github.com/shadcn.png"
-                            alt="@shadcn"
-                          />
-                          <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        Username
+                        <Avvvatars value={given_name!} />
+                        {given_name}
                       </div>
                       <ModeToggle />
                     </div>

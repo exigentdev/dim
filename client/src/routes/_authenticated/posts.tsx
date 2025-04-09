@@ -1,5 +1,5 @@
 import { fetchPosts } from '@/api/posts';
-import { Card, CardContent } from '@/components/ui/card';
+import { PostCard } from '@/components/post-card';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -22,14 +22,10 @@ function Posts() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto max-w-2xl p-3">
       <div className="space-y-6">
         {data.map((post) => (
-          <Card key={post.id}>
-            <CardContent>
-              <p>{post.dateCreated.toString()}</p>
-            </CardContent>
-          </Card>
+          <PostCard post={post} />
         ))}
       </div>
     </div>

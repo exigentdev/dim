@@ -1,3 +1,3 @@
 export interface IStorageService {
-  uploadFile(file: File, username: string): Promise<string>;
+  uploadFile(file: File): Promise<string>;
 }

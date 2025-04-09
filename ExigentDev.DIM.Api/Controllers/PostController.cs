@@ -37,7 +37,7 @@ namespace ExigentDev.DIM.Api.Controllers
 
       var postsDtos = posts.Select(post => post.ToPostDto());
 
-      return Ok(posts);
+      return Ok(postsDtos);
     }
 
     [Authorize]

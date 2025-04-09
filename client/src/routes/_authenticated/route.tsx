@@ -11,6 +11,7 @@ export const Route = createFileRoute('/_authenticated')({
   component: Authenticated,
   beforeLoad: async ({ context }) => {
     const { isLoggedIn } = context.authentication;
+
     if (!isLoggedIn()) {
       throw redirect({ to: '/login' });
     }

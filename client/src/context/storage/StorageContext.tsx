@@ -1,5 +1,5 @@
 import { IStorageService } from '@/services/storage/IStorageService';
-import { createS3StorageService } from '@/services/storage/S3StorageService';
+import { createCloudinaryStorageService } from '@/services/storage/CloudinaryStorageService';
 import { createContext, useContext } from 'react';
 
 const StorageContext = createContext<IStorageService | null>(null);
@@ -11,7 +11,7 @@ type StorageProviderProps = {
 
 export const StorageProvider = ({
   children,
-  storageService = createS3StorageService(),
+  storageService = createCloudinaryStorageService(),
 }: StorageProviderProps) => {
   return (
     <StorageContext.Provider value={storageService}>

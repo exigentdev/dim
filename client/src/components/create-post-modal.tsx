@@ -11,7 +11,6 @@ import {
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 import { useRef, useState } from 'react';
-import { decodeJWT } from '@/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPost } from '@/api/posts';
 import { CreatePostDto } from 'types/create-post-dto';
@@ -20,9 +19,10 @@ import { toast } from 'sonner';
 import { useStorage } from '@/context/storage/StorageContext';
 import { Rating } from './ui/rating';
 import { Label } from './ui/label';
+import { ScrollArea } from './ui/scroll-area';
 
 const createPostSchema = z.object({
-  comment: z.string().min(1),
+  comment: z.string().min(1, { message: 'Please enter a comment' }),
   breed: z.string(),
   name: z.string(),
 });
@@ -71,9 +71,7 @@ export function CreatePostModal(props: CreatePostModalProps) {
       return;
     }
 
-    const { given_name: username } = decodeJWT();
-
-    const url = await storageService.uploadFile(file, username);
+    const url = await storageService.uploadFile(file);
 
     const createPostDto: CreatePostDto = {
       dogImageUrls: [url],
@@ -112,6 +110,9 @@ export function CreatePostModal(props: CreatePostModalProps) {
   const handleRemoveImage = () => {
     setImagePreview(undefined);
     setFile(undefined);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const onStarClick = (index: number) => {
@@ -120,67 +121,69 @@ export function CreatePostModal(props: CreatePostModalProps) {
 
   return (
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-h-screen">
         <DialogHeader>
           <DialogTitle>Create Post</DialogTitle>
           <DialogDescription>Share your favorite dogs!</DialogDescription>
         </DialogHeader>
-        <form id="create-form" onSubmit={onSubmit}>
-          <div className="grid gap-3 py-4">
-            <div className="grid gap-3">
-              <div>
-                <Textarea
-                  className="min-h-[100px] resize-none border-none p-4 shadow-none focus-visible:ring-0"
-                  placeholder="Tell us about the bestest doggo!"
-                  name="comment"
-                />
-              </div>
-              <div className="grid w-full gap-1.5">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  className="border-none shadow-none focus-visible:ring-0"
-                  id="name"
-                  placeholder="LeBark James"
-                  name="name"
-                />
-              </div>
-              <div className="grid w-full gap-1.5">
-                <Label htmlFor="breed">Breed</Label>
-                <Input
-                  className="border-none shadow-none focus-visible:ring-0"
-                  id="breed"
-                  placeholder="Poodle"
-                  name="breed"
-                />
-              </div>
-              <div className="grid grid-cols-[auto_1fr] items-center gap-3">
-                <Label className="text-base" htmlFor="rating">
-                  Rating:
-                </Label>
-                <Rating rating={ratingNum} onClick={onStarClick} />
-              </div>
-            </div>
-            {imagePreview && (
-              <div className="mt-3 flex justify-center overflow-hidden rounded-md">
-                <div className="relative">
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    className="absolute top-1 right-1 h-8 w-8 rounded-full opacity-90"
-                    onClick={handleRemoveImage}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                  <img
-                    src={imagePreview as string}
-                    alt="Post preview"
-                    className="h-auto max-h-[150px] object-contain"
+        <ScrollArea className="max-h-[calc(100vh-200px)]">
+          <form id="create-form" onSubmit={onSubmit}>
+            <div className="grid gap-3 py-4">
+              <div className="grid gap-3">
+                <div>
+                  <Textarea
+                    className="min-h-[100px] resize-none border-none p-4 shadow-none focus-visible:ring-0"
+                    placeholder="Tell us about the bestest doggo!"
+                    name="comment"
                   />
                 </div>
+                <div className="grid w-full gap-1.5">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    className="border-none shadow-none focus-visible:ring-0"
+                    id="name"
+                    placeholder="LeBark James"
+                    name="name"
+                  />
+                </div>
+                <div className="grid w-full gap-1.5">
+                  <Label htmlFor="breed">Breed</Label>
+                  <Input
+                    className="border-none shadow-none focus-visible:ring-0"
+                    id="breed"
+                    placeholder="Poodle"
+                    name="breed"
+                  />
+                </div>
+                <div className="grid grid-cols-[auto_1fr] items-center gap-3">
+                  <Label className="text-base" htmlFor="rating">
+                    Rating:
+                  </Label>
+                  <Rating rating={ratingNum} onClick={onStarClick} />
+                </div>
               </div>
-            )}
-          </div>
-        </form>
+              {imagePreview && (
+                <div className="mt-3 flex justify-center overflow-hidden rounded-md">
+                  <div className="relative">
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-1 right-1 h-8 w-8 rounded-full opacity-90"
+                      onClick={handleRemoveImage}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                    <img
+                      src={imagePreview as string}
+                      alt="Post preview"
+                      className="h-auto max-h-[150px] object-contain"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </form>
+        </ScrollArea>
         <DialogFooter className="flex flex-row items-center justify-between sm:justify-between">
           <Button
             variant="outline"

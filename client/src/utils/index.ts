@@ -1,14 +1,9 @@
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
 import { TOKENKEY } from './constants';
 
 interface JWTClaims {
   given_name: string;
   email: string;
-}
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  exp: number;
 }
 
 export function decodeJWT(): JWTClaims {

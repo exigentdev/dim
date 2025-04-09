@@ -20,7 +20,13 @@ namespace ExigentDev.DIM.Api.Repositories
 
     public async Task<List<Post>> GetAllAsync(QueryObject queryObject)
     {
-      var posts = _context.Posts.AsQueryable();
+      var posts = _context
+        .Posts.Include(post => post.AppUser)
+        .Include(post => post.Dog)
+        .ThenInclude(dog => dog.DogImages)
+        .Include(post => post.LikedPosts)
+        .ThenInclude(likedPost => likedPost.AppUser)
+        .AsQueryable();
 
       var skipNumber = (queryObject.PageNumber - 1) * queryObject.PageSize;
 
