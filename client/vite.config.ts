@@ -7,6 +7,8 @@ import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
+  console.log(env.VITE_API_URL);
+
   return {
     plugins: [
       TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
