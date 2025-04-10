@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://dimapi.exigent.dev/:path*"
+      "destination": "https://dimapi.exigent.dev/api/:path*"
     },
     {
       "source": "/api/:path*/",
-      "destination": "https://dimapi.exigent.dev/:path*/"
+      "destination": "https://dimapi.exigent.dev/api/:path*/"
     }
   ]
 }
