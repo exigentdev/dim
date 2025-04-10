@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://dimapi.exigent.dev/:path*"
+    },
+    {
+      "source": "/api/:path*/",
+      "destination": "https://dimapi.exigent.dev/:path*/"
+    }
+  ]
+}
