@@ -15,7 +15,12 @@ export const useAuth = () => {
   };
 
   const isLoggedIn = () => {
-    const jwt = decodeJWT();
+    let jwt;
+    try {
+      jwt = decodeJWT();
+    } catch (error) {
+      return false;
+    }
 
     return (
       localStorage.getItem(TOKENKEY) !== null && jwt.exp * 1000 > Date.now()
