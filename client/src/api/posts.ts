@@ -4,7 +4,7 @@ import { CreatePostDto } from '../../types/create-post-dto';
 import { LikePostDto } from '../../types/like-post-dto';
 import { TOKENKEY } from '@/utils/constants';
 
-const API_BASE_URL = process.env.API_BASE_URL || '';
+const API_BASE_URL = process.env.VITE_API_URL || '';
 
 export const fetchPosts = async (): Promise<PostDto[]> => {
   const token = localStorage.getItem(TOKENKEY);
