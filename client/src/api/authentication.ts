@@ -6,6 +6,7 @@ import { RegisterDto } from 'types/register-dto';
 const API_BASE_URL = process.env.API_BASE_URL || '';
 
 export const loginUser = async (loginInfo: LoginDto): Promise<NewUserDto> => {
+  console.log(`${API_BASE_URL}/api/account/login`);
   const { data } = await axios.post<LoginDto, AxiosResponse<NewUserDto>>(
     `${API_BASE_URL}/api/account/login`,
     loginInfo,
