@@ -20,7 +20,20 @@ var authAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
 var authSigningKey = Environment.GetEnvironmentVariable("JWT_SIGNINGKEY");
 var connectionString = dbEnv == "dev" ? dbDevString : dbProdString;
 
+var ExigentCorsPolicy = "AllowExigent";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy(
+    name: ExigentCorsPolicy,
+    policy =>
+    {
+      policy.WithOrigins("http://dim.exigent.com");
+    }
+  );
+});
 
 builder
   .Services.AddControllers()
@@ -113,7 +126,7 @@ if (app.Environment.IsDevelopment())
       .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
   });
 }
-
+app.UseCors(ExigentCorsPolicy);
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
